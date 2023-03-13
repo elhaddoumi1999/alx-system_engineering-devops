@@ -1,2 +1,5 @@
-#!/bin/bash 
-echo "Best School" > \*\\'"Best School"\'\\*$\?\*\*\*\*\*:) 
+#!/bin/bash
+
+touch '*\\'"Best School"\'\\*$\?\*\*\*\*\*:)     # create the file
+echo "Best School" > '*\\'"Best School"\'\\*$\?\*\*\*\*\*:'    # add text to the file
+echo "" >> '*\\'"Best School"\'\\*$\?\*\*\*\*\*:'
