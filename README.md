@@ -9,6 +9,8 @@ This repository contains programs written for the system engineering and DevOps 
 * [0x03. Shell, init files, variables and expansions](./0x03-shell_variables_expansions)
 * [0x04. Loops, conditions and parsing](./0x04-loops_conditions_and_parsing)
 * [0x05. Processes and signals](./0x05-processes_and_signals)
+* [0x06. Regular expression](./0x06-regular_expressions)
+* [Command Line for the Win](./command_line_for_the_win)
 
 # Author
 * Mohammed EL HADDOUMI [elhaddoumi1999](https://github.com/Theemiss)
