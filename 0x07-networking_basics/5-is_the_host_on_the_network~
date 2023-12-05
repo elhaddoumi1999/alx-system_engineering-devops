@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+"""pings an ip address passed as an arguement"""

@@ -1,13 +1,25 @@
 #!/usr/bin/env bash
-# print To infinity and beyond indefinitely with delay 2 and handle different signal and save my pid in a file
-sudo bash -c "echo $$ > /var/run/myscript.pid"
-trap 'echo "Y U no love me?!"' SIGINT
-trap "sudo rm -f /var/run/myscript.pid; exit" SIGQUIT
-trap "sudo rm -f /var/run/myscript.pid; echo I hate the kill command; exit" SIGTERM
+# Manages 'manage_my_process'
 
-while :
-do
-	echo "To infinity and beyond"
-	sleep 2
-
-done
+if [ "${1}" == "start" ]
+then
+    ./manage_my_process &
+    touch /var/run/my_process.pid
+    echo "$!" > /var/run/my_process.pid
+    echo "manage_my_process started"
+elif [ "${1}" == "stop" ]
+then
+    echo "manage_my_process stopped"
+    kill "$(cat /var/run/my_process.pid)"
+    rm /var/run/my_process.pid
+elif [ "${1}" == "restart" ]
+then
+    kill "$(cat /var/run/my_process.pid)"
+    rm /var/run/my_process.pid
+    ./manage_my_process &
+    touch /var/run/my_process.pid
+    echo "$!" > /var/run/my_process.pid
+    echo "manage_my_process restarted"
+else
+    echo "Usage: manage_my_process {start|stop|restart}"
+fi
