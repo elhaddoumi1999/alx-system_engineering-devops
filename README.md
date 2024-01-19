@@ -13,6 +13,7 @@ This repository contains programs written for the system engineering and DevOps 
 * [0x07. Networking basics #0](./0x07-networking_basics)
 * [0x08. Networking basics #1](./0x08-networking_basics_2)
 * [0x09. Web infrastructure design](./0x09-web_infrastructure_design)
+* [0x0A. Configuration management](./0x0A-configuration_management)
 * [Command Line for the Win](./command_line_for_the_win)
 # Author
 * Mohammed EL HADDOUMI [elhaddoumi1999](https://github.com/Theemiss)
