@@ -1,20 +1,13 @@
-# Install Nginx web server (w/ Puppet)
-package { 'nginx':
-  ensure => installed,
-}
+#!/usr/bin/env bash
+# Configures an Nginx server so that /redirect_me redirects to another page.
+#  redirection is configured as a "301 Moved Permanently"
 
-file_line { 'aaaaa':
-  ensure => 'present',
-  path   => '/etc/nginx/sites-available/default',
-  after  => 'listen 80 default_server;',
-  line   => 'rewrite ^/redirect_me https://www.youtube.com/watch?v=QH2-TGUlwu4 permanent;',
-}
-
-file { '/var/www/html/index.html':
-  content => 'Hello World!',
-}
-
-service { 'nginx':
-  ensure  => running,
-  require => Package['nginx'],
-}
+sudo apt-get update -y && sudo apt-get upgrade -y
+sudo apt-get install -y nginx
+sudo chown -R "$USER":"$USER" /var/www/
+sudo chown -R "$USER":"$USER" /etc/nginx
+echo "Hello World!" > /var/www/html/index.nginx-debian.html
+line="\\\trewrite ^/redirect_me https://www.youtube.com/watch?v=QH2-TGUlwu4 permanent;"
+sudo sed -i "26i $line" /etc/nginx/sites-available/default
+sudo service nginx restart
+sudo service nginx reload
