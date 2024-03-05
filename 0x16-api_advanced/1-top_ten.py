@@ -1,20 +1,24 @@
 #!/usr/bin/python3
-"""Reddit client"""
+'''
+    this module contains the function top_ten
+'''
 import requests
+from sys import argv
 
 
 def top_ten(subreddit):
-    """
-    prints the first 10 hot post listed for a given subreddit
-    """
-    url = "https://www.reddit.com/r/{}/hot.json".format(subreddit)
-    headers = {"user-agent": "API project by andreshugueth"}
-    size_query = {"limit": 10}
-    r = requests.get(url, params=size_query, headers=headers).json()
-    children = r.get("data", {}).get("children", None)
+    '''
+        returns the top ten posts for a given subreddit
+    '''
+    user = {'User-Agent': 'Lizzie'}
+    url = requests.get('https://www.reddit.com/r/{}/hot/.json?limit=10'
+                       .format(subreddit), headers=user).json()
+    try:
+        for post in url.get('data').get('children'):
+            print(post.get('data').get('title'))
+    except Exception:
+        print(None)
 
-    if children:
-        for topic in children:
-            print(topic.get("data").get("title"))
-    else:
-        print("None")
+
+if __name__ == "__main__":
+    top_ten(argv[1])
