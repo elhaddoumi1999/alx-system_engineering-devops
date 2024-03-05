@@ -1,21 +1,20 @@
 #!/usr/bin/python3
-"""Function to query subscribers on a given Reddit subreddit."""
-import json
+"""Reddit client"""
 import requests
 
 
 def top_ten(subreddit):
-    url = "https://www.reddit.com/r/{}/hot/.json".format(subreddit)
-    headers = {
-        "User-Agent": "linux:0x16.api.advanced:v1.0.0 (by /u/bdov_)"
-    }
-    params = {
-        "limit": 10
-    }
-    response = requests.get(url, headers=headers, params=params,
-                            allow_redirects=False)
-    if response.status_code == 404:
+    """
+    prints the first 10 hot post listed for a given subreddit
+    """
+    url = "https://www.reddit.com/r/{}/hot.json".format(subreddit)
+    headers = {"user-agent": "API project by andreshugueth"}
+    size_query = {"limit": 10}
+    r = requests.get(url, params=size_query, headers=headers).json()
+    children = r.get("data", {}).get("children", None)
+
+    if children:
+        for topic in children:
+            print(topic.get("data").get("title"))
+    else:
         print("None")
-        return
-    results = response.json().get("data")
-    [print(c.get("data").get("title")) for c in results.get("children")]
