@@ -1,7 +1,4 @@
 #!/usr/bin/python3
-"""
-2-main
-"""
 import sys
 
 if __name__ == '__main__':

@@ -1,16 +1,13 @@
 #!/usr/bin/python3
-"""
-function to query a list of all hot posts on a given Reddit subreddit
-"""
+"""Function to query a list of all hot posts on a given Reddit subreddit."""
 import requests
 
 
 def recurse(subreddit, hot_list=[], after="", count=0):
-    """
-    returns a list of titles of all hot posts on a given subreddit"""
+    """Returns a list of titles of all hot posts on a given subreddit."""
     url = "https://www.reddit.com/r/{}/hot/.json".format(subreddit)
     headers = {
-        "User-Agent": "Linux:0x16-api_advanced"
+        "User-Agent": "linux:0x16.api.advanced:v1.0.0 (by /u/bdov_)"
     }
     params = {
         "after": after,
@@ -21,6 +18,7 @@ def recurse(subreddit, hot_list=[], after="", count=0):
                             allow_redirects=False)
     if response.status_code == 404:
         return None
+
     results = response.json().get("data")
     after = results.get("after")
     count += results.get("dist")
