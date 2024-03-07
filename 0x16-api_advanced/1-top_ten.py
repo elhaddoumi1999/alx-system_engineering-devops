@@ -1,21 +1,41 @@
 #!/usr/bin/python3
-""" Function that queries the Reddit API """
+'''A module containing functions for working with the Reddit API.
+'''
 import requests
-import sys
+
+
+BASE_URL = 'https://www.reddit.com'
+'''Reddit's base API URL.
+'''
 
 
 def top_ten(subreddit):
-    """ Returns: top ten post titles
-        or None if queried subreddit is invalid """
-    headers = {'User-Agent': 'xica369'}
-    url = "https://www.reddit.com/r/{}/hot.json".format(subreddit)
-    parameters = {'limit': 10}
-    response = requests.get(url, headers=headers, allow_redirects=False,
-                            params=parameters)
-
-    if response.status_code == 200:
-        titles_ = response.json().get('data').get('children')
-        for title_ in titles_:
-            print(title_.get('data').get('title'))
+    '''Retrieves the title of the top ten posts from a given subreddit.
+    '''
+    api_headers = {
+        'Accept': 'application/json',
+        'User-Agent': ' '.join([
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
+            'AppleWebKit/537.36 (KHTML, like Gecko)',
+            'Chrome/97.0.4692.71',
+            'Safari/537.36',
+            'Edg/97.0.1072.62'
+        ])
+    }
+    sort = 'top'
+    limit = 10
+    res = requests.get(
+        '{}/r/{}/.json?sort={}&limit={}'.format(
+            BASE_URL,
+            subreddit,
+            sort,
+            limit
+        ),
+        headers=api_headers,
+        allow_redirects=False
+    )
+    if res.status_code == 200:
+        for post in res.json()['data']['children'][0:10]:
+            print(post['data']['title'])
     else:
         print(None)
