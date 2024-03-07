@@ -1,25 +1,21 @@
-#!/usr/bin/python3
-"""
-Query Reddit API for number of subscribers for a given subreddit
-"""
 import requests
-
 
 def number_of_subscribers(subreddit):
     """
-        return number of subscribers for a given subreddit
-        return 0 if invalid subreddit given
+    Return the number of subscribers for a given subreddit.
+    Return 0 if an invalid subreddit is given.
     """
-    url = "https://www.reddit.com/r/{}/about.json".format(subreddit)
+    url = f"https://www.reddit.com/r/{subreddit}/about.json"
 
-    # get user agent
-    # https://stackoverflow.com/questions/10606133/ -->
-    # sending-user-agent-using-requests-library-in-python
-    headers = requests.utils.default_headers()
-    headers.update({'User-Agent': 'My User Agent 1.0'})
+    # Set a proper user agent to avoid being blocked by Reddit
+    headers = {'User-Agent': 'My User Agent 1.0'}
 
-    r = requests.get(url, headers=headers).json()
-    subscribers = r.get('data', {}).get('subscribers')
-    if not subscribers:
+    try:
+        response = requests.get(url, headers=headers)
+        response.raise_for_status()  # Raise an exception for bad responses
+        data = response.json()
+        subscribers = data.get('data', {}).get('subscribers', 0)
+        return subscribers
+    except requests.exceptions.RequestException as e:
+        print(f"Error fetching data: {e}")
         return 0
-    return subscribers
