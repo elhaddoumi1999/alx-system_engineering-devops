@@ -1,39 +1,33 @@
 #!/usr/bin/python3
-"""script for parsing web data from an api
-"""
-import json
+""" recursive function that queries the Reddit API """
 import requests
 import sys
+after = None
 
 
 def recurse(subreddit, hot_list=[]):
-    """api call to reddit to get the number of subscribers
-    """
-    base_url = 'https://www.reddit.com/r/{}/top.json'.format(
-        subreddit
-    )
-    headers = {
-        'User-Agent':
-        'Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.9.2.3) \
-        Gecko/20100401 Firefox/3.6.3 (FM Scene 4.6.1)'
-    }
-    if len(hot_list) == 0:
-        # grab info about all users
-        url = base_url
-    else:
-        url = base_url + '?after={}_{}'.format(
-            hot_list[-1].get('kind'),
-            hot_list[-1].get('data').get('id')
-        )
-    response = requests.get(url, headers=headers)
-    resp = json.loads(response.text)
-    try:
-        # grab the info about the users' tasks
-        data = resp.get('data')
-        children = data.get('children')
-    except:
-        return None
-    if children is None or data is None or len(children) < 1:
+    """     Args:
+        subreddit: subreddit name
+        hot_list: list of hot titles in subreddit
+        after: last hot_item appended to hot_list
+    Returns:
+        a list containing the titles of all hot articles for the subreddit
+        or None if queried subreddit is invalid """
+    global after
+    headers = {'User-Agent': 'xica369'}
+    url = "https://www.reddit.com/r/{}/hot.json".format(subreddit)
+    parameters = {'after': after}
+    response = requests.get(url, headers=headers, allow_redirects=False,
+                            params=parameters)
+
+    if response.status_code == 200:
+        next_ = response.json().get('data').get('after')
+        if next_ is not None:
+            after = next_
+            recurse(subreddit, hot_list)
+        list_titles = response.json().get('data').get('children')
+        for title_ in list_titles:
+            hot_list.append(title_.get('data').get('title'))
         return hot_list
-    hot_list.extend(children)
-    return recurse(subreddit, hot_list)
+    else:
+        return (None)
